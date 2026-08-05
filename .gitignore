@@ -28,3 +28,6 @@ test-results/
 playwright-report/
 blob-report/
 
+# graphify: cache local régénérable, pas le graphe lui-même
+graphify-out/cache/
+

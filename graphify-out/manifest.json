@@ -1,0 +1,72 @@
+{
+  ".claude/hooks/check-file.sh": {
+    "mtime": 1785931124.0535347,
+    "ast_hash": "ddae24d3bbbd927914af194f6b81c8fa",
+    "semantic_hash": "ddae24d3bbbd927914af194f6b81c8fa"
+  },
+  ".claude/settings.json": {
+    "mtime": 1785931116.0479705,
+    "ast_hash": "59723ff79cef7b890bf715c3aaa20c92",
+    "semantic_hash": "59723ff79cef7b890bf715c3aaa20c92"
+  },
+  ".vscode/extensions.json": {
+    "mtime": 1785334827.0,
+    "ast_hash": "3adedb22d082dbd1ebb00b75d21403aa",
+    "semantic_hash": "3adedb22d082dbd1ebb00b75d21403aa"
+  },
+  ".vscode/launch.json": {
+    "mtime": 1785334827.0,
+    "ast_hash": "60493763dcbc2d109e57da86d997602a",
+    "semantic_hash": "60493763dcbc2d109e57da86d997602a"
+  },
+  "astro.config.mjs": {
+    "mtime": 1785930849.2157245,
+    "ast_hash": "c43e8517798073d176367bbeeb44a226",
+    "semantic_hash": "c43e8517798073d176367bbeeb44a226"
+  },
+  "brand/graph.json": {
+    "mtime": 1785931292.0485113,
+    "ast_hash": "2c449e0b0f8ae680cb90da9048d6d538",
+    "semantic_hash": "2c449e0b0f8ae680cb90da9048d6d538"
+  },
+  "eslint.config.js": {
+    "mtime": 1785931457.537063,
+    "ast_hash": "f1a70b0ac705ad10bf72c700a6f47223",
+    "semantic_hash": "f1a70b0ac705ad10bf72c700a6f47223"
+  },
+  "package.json": {
+    "mtime": 1785931431.4081137,
+    "ast_hash": "6a682880342815db289b1ea99e415c7b",
+    "semantic_hash": "6a682880342815db289b1ea99e415c7b"
+  },
+  "playwright.config.ts": {
+    "mtime": 1785931646.3760934,
+    "ast_hash": "e8276565b34d22c7f5db0604f8b0754f",
+    "semantic_hash": "e8276565b34d22c7f5db0604f8b0754f"
+  },
+  "renovate.json": {
+    "mtime": 1785931401.7187042,
+    "ast_hash": "cc103a374768ced2fc100d25fbca8367",
+    "semantic_hash": "cc103a374768ced2fc100d25fbca8367"
+  },
+  "src/pages/index.astro": {
+    "mtime": 1785931597.7174625,
+    "ast_hash": "0d056b5869d29c85efb3a116c1e368b5",
+    "semantic_hash": "0d056b5869d29c85efb3a116c1e368b5"
+  },
+  "tests/e2e/home.spec.ts": {
+    "mtime": 1785931170.092354,
+    "ast_hash": "bb7febf5310e0b3a1df8a1c2e06e5920",
+    "semantic_hash": "bb7febf5310e0b3a1df8a1c2e06e5920"
+  },
+  "tsconfig.json": {
+    "mtime": 1785930949.2159078,
+    "ast_hash": "261872c4f5a48a51e13c807d6c6a5e6a",
+    "semantic_hash": "261872c4f5a48a51e13c807d6c6a5e6a"
+  },
+  "vitest.config.ts": {
+    "mtime": 1785931500.4219348,
+    "ast_hash": "f3979f9ce1adba4fd552ce912988e260",
+    "semantic_hash": "f3979f9ce1adba4fd552ce912988e260"
+  }
+}

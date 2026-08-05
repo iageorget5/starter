@@ -1,0 +1,245 @@
+{
+  "communities": {
+    "0": [
+      "astro",
+      "astrojs_preact",
+      "package_dependencies",
+      "package_dependencies_astro",
+      "package_dependencies_astrojs_preact",
+      "package_dependencies_preact",
+      "package_dependencies_tailwindcss",
+      "package_dependencies_tailwindcss_vite",
+      "preact",
+      "tailwindcss",
+      "tailwindcss_vite"
+    ],
+    "1": [
+      "package_scripts",
+      "package_scripts_astro",
+      "package_scripts_build",
+      "package_scripts_check",
+      "package_scripts_dev",
+      "package_scripts_preview",
+      "package_scripts_test",
+      "package_scripts_test_e2e"
+    ],
+    "2": [
+      "ref",
+      "ref_astro_tsconfigs_strictest",
+      "ref_astro_types_d_ts",
+      "ref_dist",
+      "tsconfig",
+      "tsconfig_exclude",
+      "tsconfig_extends",
+      "tsconfig_include"
+    ],
+    "3": [
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_exactoptionalpropertytypes",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_jsximportsource",
+      "tsconfig_compileroptions_noimplicitoverride",
+      "tsconfig_compileroptions_nouncheckedindexedaccess",
+      "tsconfig_compileroptions_verbatimmodulesyntax"
+    ],
+    "4": [
+      "package",
+      "package_engines",
+      "package_engines_node",
+      "package_name",
+      "package_type",
+      "package_version"
+    ],
+    "5": [
+      "astrojs_check",
+      "package_devdependencies",
+      "package_devdependencies_astrojs_check",
+      "package_devdependencies_prettier_plugin_tailwindcss",
+      "prettier_plugin_tailwindcss"
+    ],
+    "6": [
+      "ref_config_recommended",
+      "renovate",
+      "renovate_extends",
+      "renovate_schema"
+    ],
+    "7": [
+      "axe_core_playwright",
+      "package_devdependencies_axe_core_playwright"
+    ],
+    "8": [
+      "claude_hooks_check_file",
+      "claude_hooks_check_file_sh__entry"
+    ],
+    "9": [
+      "eslint",
+      "package_devdependencies_eslint"
+    ],
+    "10": [
+      "eslint_js",
+      "package_devdependencies_eslint_js"
+    ],
+    "11": [
+      "eslint_plugin_astro",
+      "package_devdependencies_eslint_plugin_astro"
+    ],
+    "12": [
+      "package_devdependencies_playwright_test",
+      "playwright_test"
+    ],
+    "13": [
+      "package_devdependencies_prettier",
+      "prettier"
+    ],
+    "14": [
+      "package_devdependencies_prettier_plugin_astro",
+      "prettier_plugin_astro"
+    ],
+    "15": [
+      "package_devdependencies_types_node",
+      "types_node"
+    ],
+    "16": [
+      "package_devdependencies_typescript",
+      "typescript"
+    ],
+    "17": [
+      "package_devdependencies_typescript_eslint",
+      "typescript_eslint"
+    ],
+    "18": [
+      "package_devdependencies_vitest",
+      "vitest"
+    ],
+    "19": [
+      "package_devdependencies_vitest_coverage_v8",
+      "vitest_coverage_v8"
+    ],
+    "20": [
+      "package_devdependencies_zod",
+      "zod"
+    ],
+    "21": [
+      "astro_config"
+    ],
+    "22": [
+      "eslint_config"
+    ],
+    "23": [
+      "playwright_config"
+    ],
+    "24": [
+      "src_pages_index"
+    ],
+    "25": [
+      "tests_e2e_home_spec"
+    ],
+    "26": [
+      "vitest_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.18181818181818182,
+    "1": 0.25,
+    "2": 0.25,
+    "3": 0.2857142857142857,
+    "4": 0.3333333333333333,
+    "5": 0.4,
+    "6": 0.5,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0
+  },
+  "gods": [
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 8
+    },
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 7
+    },
+    {
+      "id": "tsconfig_include",
+      "label": "include",
+      "degree": 3
+    },
+    {
+      "id": "package_engines",
+      "label": "engines",
+      "degree": 2
+    },
+    {
+      "id": "package_dependencies_astrojs_preact",
+      "label": "@astrojs/preact",
+      "degree": 2
+    },
+    {
+      "id": "package_dependencies_tailwindcss_vite",
+      "label": "@tailwindcss/vite",
+      "degree": 2
+    },
+    {
+      "id": "package_dependencies_astro",
+      "label": "astro",
+      "degree": 2
+    },
+    {
+      "id": "package_dependencies_preact",
+      "label": "preact",
+      "degree": 2
+    },
+    {
+      "id": "package_dependencies_tailwindcss",
+      "label": "tailwindcss",
+      "degree": 2
+    },
+    {
+      "id": "package_devdependencies_astrojs_check",
+      "label": "@astrojs/check",
+      "degree": 2
+    }
+  ],
+  "surprises": [],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `devDependencies` connect `devDependencies` to `package.json`, `@axe-core/playwright`, `eslint`, `@eslint/js`, `eslint-plugin-astro`, `@playwright/test`, `prettier`, `prettier-plugin-astro`, `@types/node`, `typescript`, `typescript-eslint`, `vitest`, `@vitest/coverage-v8`, `zod`?",
+      "why": "High betweenness centrality (0.352) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `dependencies` connect `dependencies` to `package.json`?",
+      "why": "High betweenness centrality (0.148) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `scripts` connect `scripts` to `package.json`?",
+      "why": "High betweenness centrality (0.107) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `check-file.sh script`, `name`, `type` to the rest of the system?",
+      "why": "45 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}
