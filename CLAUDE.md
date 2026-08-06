@@ -30,7 +30,11 @@ Web Components natifs (léger). Wasm uniquement si justifié dans la spec.
 - `src/lib/` — logique : fetch, transformations, validation zod (testée)
 - `src/content/` — textes/données en Markdown/JSON, jamais de texte en dur
 - `brand/` — source de vérité identité + tokens. NE JAMAIS inventer une
-  couleur, une police ou un ton : tout vient de brand/.
+  couleur, une police, un ton ou un nom : tout vient de brand/.
+- `src/config.ts` — expose `SITE_NAME` (lu depuis `brand/tokens.json`).
+  Le nom du projet ne se code JAMAIS en dur ailleurs (titres, meta,
+  OpenGraph, footer, mentions légales, contenus) : voir `brand/README.md`
+  pour les exceptions documentées et la procédure de renommage.
 - `tests/` — unitaires (Vitest) et e2e (Playwright). Capital cumulable.
 - `DECISIONS.md` — journal des décisions structurantes (format ADR léger).
 
