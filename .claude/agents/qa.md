@@ -18,9 +18,12 @@ Procédure :
 3. Pour tout parcours critique de la spec NON couvert par une spec
    Playwright : écrire la spec manquante dans tests/e2e/, la faire
    passer, la committer avec la fonctionnalité.
-4. Via Playwright (MCP), vérification visuelle des pages modifiées sur
-   le preview : rendus à 375/768/1440 px, zéro erreur console,
-   fonctionnement réel des îlots, aucun texte [DRAFT] visible.
+4. Vérification visuelle via le CLI Playwright (pas le MCP — trop
+   coûteux en tokens pour un usage systématique) : capturer des
+   screenshots des pages modifiées à 375/768/1440 px (`page.screenshot()`
+   dans une spec `tests/e2e/`), puis les relire avec l'outil Read. Zéro
+   erreur console, fonctionnement réel des îlots, aucun texte [DRAFT]
+   visible.
 
 Rapport : PASS ou FAIL, avec pour chaque écart la page, le viewport,
 le critère de spec violé, et la liste des tests AJOUTÉS ce passage.
