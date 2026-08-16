@@ -54,6 +54,9 @@ Web Components natifs (léger). Wasm uniquement si justifié dans la spec.
 - `scripts/` — outils lancés à la main, hors du build Astro. Sorties
   **commitées** : le script n'existe que pour rendre la transformation
   rejouable, jamais pour la refaire à chaque build.
+  - `build-graph-bridges.mjs` / `check-graph-freshness.mjs` — ponts et
+    fraîcheur du graphe (voir la section Knowledge graph). Aucune
+    dépendance.
   - `build-media.mjs` — décline images et vidéos aux largeurs de
     `src/lib/media-widths.json`, extrait les affiches, compresse.
     Requiert `npm i -D sharp ffmpeg-static` **par projet** : ces paquets ne
@@ -73,22 +76,30 @@ Web Components natifs (léger). Wasm uniquement si justifié dans la spec.
   architecturale naissante).
 - Les arêtes INFERRED ou AMBIGUOUS ne sont pas des faits : vérifier dans
   le code avant de s'y appuyer.
-- **Une règle écrite ne s'applique pas toute seule.** Sur agence-site, cette
-  consigne de reconstruction n'a jamais été suivie de tout le projet : le
-  graphe décrivait encore le starter neuf jours plus tard, 83 nœuds dont les
-  plus connectés étaient les clés de `package.json`. Un artefact dérivé doit
-  porter sa date de construction **et** quelque chose doit la lire — sinon
-  personne ne regarde. Prévoir un contrôle de fraîcheur (commit du graphe vs
-  commit des fichiers indexés) branché sur `pre-ship`, jamais sur la CI : un
-  graphe périmé n'est pas un défaut du site livré.
-- **Le graphe brut ne relie pas les décisions au code.** L'AST et
-  l'extraction sémantique fabriquent des identifiants sans rapport : mesuré
-  sur agence-site, zéro arête entre un `.ts` et un `.md`. Il répond donc à
-  « qui appelle cette fonction ? » et à « quelles décisions parlent de X ? »,
-  jamais à « quelle décision explique ce code ? ». Le remède est un
-  post-traitement qui dérive les ponts des chemins de fichiers déjà cités en
-  prose dans les documents — d'où l'intérêt de **toujours citer les chemins
-  de fichiers dans `DECISIONS.md`**.
+- **Reconstruire se fait en deux temps, dans cet ordre** : `/graphify .`
+  puis `npm run graph:bridges`. graphify réécrit `graph.json`, donc inverser
+  l'ordre efface les ponts.
+- **Pourquoi le second temps existe.** Le graphe brut ne relie pas les
+  décisions au code : l'AST et l'extraction sémantique fabriquent des
+  identifiants sans rapport, et on a mesuré sur agence-site **zéro arête**
+  entre un `.ts` et un `.md`. Il répondait donc à « qui appelle cette
+  fonction ? » et à « quelles décisions parlent de X ? », jamais à « quelle
+  décision explique ce code ? ». `npm run graph:bridges` dérive ces ponts
+  des chemins de fichiers **déjà cités en prose** dans les documents —
+  d'où l'intérêt de **toujours citer les chemins de fichiers dans
+  `DECISIONS.md`**, c'est ce qui rend le journal interrogeable. Le script
+  réinjecte aussi `brand/tokens.json`, que graphify exclut à tort comme
+  fichier sensible (le radical `tokens` est un mot-clé porteur).
+- **`npm run graph:check` dit si le graphe est périmé** : il compare le
+  dernier commit du graphe au dernier commit d'un fichier indexé, et
+  inspecte l'arbre de travail. À brancher sur `pre-ship`, **jamais sur la
+  CI** : un graphe périmé n'est pas un défaut du site livré, et faire
+  échouer une PR pour cette raison apprend vite à contourner la CI.
+- **Une règle écrite ne s'applique pas toute seule.** Sur agence-site, la
+  consigne de reconstruction n'a été suivie de tout le projet : le graphe
+  décrivait encore le starter neuf jours plus tard, 83 nœuds dont les plus
+  connectés étaient les clés de `package.json`. C'est précisément pour ça
+  que le contrôle est outillé ici et pas seulement écrit.
 
 ## Workflow obligatoire
 1. Lire specs/SPEC.md avant toute fonctionnalité. Spec absente ou
