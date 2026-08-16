@@ -1,0 +1,183 @@
+---
+import LARGEURS from "../lib/media-widths.json";
+
+type Aspect = "16/9" | "9/16" | "3/4" | "1/1";
+
+interface Props {
+	kind: "image" | "video";
+	/** Chemin sans suffixe de largeur, relatif à `public/images/`. */
+	base: string;
+	aspect: Aspect;
+	alt: string;
+	/** Chemin du fichier vidéo, requis quand `kind` vaut `video`.
+	  * `| undefined` explicite : sous `exactOptionalPropertyTypes`, passer
+	  * une valeur possiblement absente à une prop simplement optionnelle est
+	  * une erreur de type. */
+	video?: string | undefined;
+	/** Jeu de largeurs produit par `npm run build:media` pour ce média.
+	  * `card` pour une colonne sur trois, `wide` pour une sur deux. Se
+	  * tromper ici fait référencer des fichiers qui n'existent pas — panne
+	  * silencieuse, invisible pour axe-core, d'où le test dédié. */
+	sizeSet?: "card" | "wide" | undefined;
+	/** Axe qui pilote la taille. `width` (défaut) : le média prend toute la
+	  * largeur disponible et sa hauteur suit le rapport. `height` : c'est la
+	  * hauteur qui est imposée par le parent et la largeur qui suit.
+	  * `fill` : les **deux** dimensions viennent du parent et le média se
+	  * contente de remplir (`object-cover`) — le cas de la bande de médias,
+	  * dont le cadre déclare hauteur et largeur. C'est ce qui évite toute
+	  * dépendance circulaire entre la taille du cadre et celle du média.
+	  * Sans cette prop, la classe `w-full` du composant entrait en conflit
+	  * avec un `w-auto` passé par l'appelant, et l'ordre de tri de Tailwind
+	  * décidait du gagnant. */
+	fit?: "width" | "height" | "fill" | undefined;
+	/** Habillage des vidéos. `native` : les contrôles du navigateur, visibles
+	  * en permanence. `overlay` : un bouton de lecture maison, les contrôles
+	  * n'apparaissant qu'une fois la lecture lancée. Dans la bande de médias,
+	  * les contrôles natifs s'affichaient au repos sur des cartes de 181 px de
+	  * large, où ils sont écrasés, illisibles, et masquent le média qu'ils
+	  * sont censés servir. */
+	chrome?: "native" | "overlay" | undefined;
+	class?: string | undefined;
+}
+
+const {
+	kind,
+	base,
+	aspect,
+	alt,
+	video,
+	sizeSet = "card",
+	fit = "width",
+	chrome = "native",
+	class: className,
+} = Astro.props;
+
+// Les classes sont écrites en clair : Tailwind ne génère que ce qu'il voit
+// dans les sources, une classe assemblée à l'exécution n'existerait jamais
+// dans la feuille de style.
+const ASPECT_CLASS: Record<Aspect, string> = {
+	"16/9": "aspect-video",
+	"9/16": "aspect-[9/16]",
+	"3/4": "aspect-[3/4]",
+	"1/1": "aspect-square",
+};
+
+const dimension =
+	fit === "fill" ? "h-full w-full" : fit === "height" ? "h-full w-auto" : "w-full";
+// En mode `fill`, le rapport vient du cadre : le poser aussi sur le média
+// rouvrirait le conflit que ce mode existe pour fermer.
+const aspectClass = fit === "fill" ? "" : ASPECT_CLASS[aspect];
+const largeurs = LARGEURS[sizeSet];
+// La plus petite largeur sert de `src` de repli et dicte les attributs
+// `width`/`height`. Elle est extraite une fois, avec un garde-fou : le JSON
+// pourrait être vidé par erreur, et `largeurs[0]` est alors `undefined` — ce
+// que `noUncheckedIndexedAccess` signale à juste titre.
+const largeurBase = largeurs[0];
+if (largeurBase === undefined) {
+	throw new Error(
+		`src/lib/media-widths.json : le jeu « ${sizeSet} » ne contient aucune largeur.`,
+	);
+}
+const srcset = largeurs
+	.map((l) => `/images/${base}-${String(l)}.webp ${String(l)}w`)
+	.join(", ");
+const src = `/images/${base}-${String(largeurBase)}.webp`;
+// L'affiche d'une vidéo (`poster`) n'a pas d'équivalent à `srcset` : c'est un
+// attribut unique, jamais réévalué selon la densité d'écran. Lui donner la
+// plus petite variante — ce que `src` fait pour l'image de repli — la rendait
+// visiblement floue dès qu'une carte dépassait sa taille de base (mosaïque de
+// médias, cartes jusqu'à ~683px). La plus grande variante est le seul choix
+// qui reste net sur un écran à haute densité, au prix de quelques dizaines de
+// ko de plus — négligeable devant le poids de la vidéo elle-même.
+const largeurPoster = largeurs[largeurs.length - 1] ?? largeurBase;
+const posterSrc = `/images/${base}-${String(largeurPoster)}.webp`;
+
+// Rapport hauteur/largeur pour les attributs de dimension : ils réservent la
+// place avant le chargement et évitent le décalage de mise en page (CLS),
+// que Lighthouse pénalise.
+const [ratioW, ratioH] = aspect.split("/").map(Number);
+const hauteurBase = Math.round((largeurBase * (ratioH ?? 1)) / (ratioW ?? 1));
+
+// `sizes` décrit la largeur d'affichage réelle, relevée au navigateur : une
+// colonne sur trois de `max-w-6xl` au-delà de 1024 px, une sur deux entre
+// 640 et 1024, pleine largeur en dessous. Sans lui, le navigateur suppose
+// 100vw et télécharge systématiquement la variante la plus lourde.
+const sizes =
+	sizeSet === "wide"
+		? "(min-width: 640px) 45vw, 92vw"
+		: "(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 92vw";
+---
+
+{
+	kind === "video" && video ? (
+		<div class:list={[aspectClass, dimension, "group relative overflow-hidden", className]}>
+			{/*
+				`preload="none"` : rien ne part sur le réseau avant que le
+				visiteur ne lance la lecture. C'est ce qui permet de servir les
+				vidéos sans les recompresser (ffmpeg absent de la machine) sans
+				peser une seule milliseconde sur le chargement de la page.
+				L'affiche, elle, est une WebP de quelques dizaines de ko.
+
+				`controls` et non une lecture automatique : une vidéo qui se
+				lance seule vole l'attention et consomme du forfait mobile.
+				`playsinline` évite le passage en plein écran forcé sur iOS.
+			*/}
+			<video
+				class="h-full w-full object-cover"
+				src={video}
+				poster={posterSrc}
+				preload="none"
+				controls
+				playsinline
+				aria-label={alt}
+				data-media-video
+			></video>
+			{
+				chrome === "overlay" && (
+					<>
+						{/*
+							Échange progressif, même motif que le bloc de
+							réservation : le serveur rend les contrôles natifs et
+							masque le bouton, l'îlot fait l'inverse. Sans JS, la
+							vidéo reste donc pilotable — ce qu'un `<noscript>` ne
+							pourrait pas faire, un attribut ne s'y ajoutant pas.
+						*/}
+						<button
+							type="button"
+							data-media-play
+							hidden
+							class="absolute inset-0 flex cursor-pointer items-center justify-center focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-inset focus-visible:outline-none"
+						>
+							<span class="sr-only">Lire la vidéo : {alt}</span>
+							<span
+								aria-hidden="true"
+								class="flex size-14 items-center justify-center rounded-full border border-hairline bg-surface/70 backdrop-blur-sm transition-transform duration-base ease-fluid group-hover:scale-105"
+							>
+								{/*
+									Triangle en SVG et non un caractère « ▶ » : un
+									glyphe dépend de la police installée et se
+									décale d'un système à l'autre.
+								*/}
+								<svg viewBox="0 0 24 24" class="ml-0.5 size-5" fill="currentColor">
+									<path d="M8 5.5v13l11-6.5z" />
+								</svg>
+							</span>
+						</button>
+					</>
+				)
+			}
+		</div>
+	) : (
+		<img
+			class:list={[aspectClass, dimension, "object-cover", className]}
+			src={src}
+			srcset={srcset}
+			sizes={sizes}
+			alt={alt}
+			loading="lazy"
+			decoding="async"
+			width={largeurBase}
+			height={hauteurBase}
+		/>
+	)
+}

@@ -1,0 +1,5 @@
+{
+  "_note": "Largeurs de rendu des médias, en pixels. Source de vérité UNIQUE, lue par scripts/build-media.mjs (qui produit les fichiers) et par src/components/MediaFigure.astro (qui les référence). Les deux les avaient en dur séparément le 2026-08-11, avec deux jeux différents : le composant demandait -384/-768 pour des captures générées en -560/-1120, et les deux images partaient en 404 sans qu'aucun test d'accessibilité ne le voie. Relevées au navigateur : une carte de média occupe une colonne sur trois de max-w-6xl, une capture de fiche une colonne sur deux ; la seconde valeur est le double, pour les écrans à haute densité. Troisième valeur de `card` ajoutée le 2026-08-13 : l'affiche (`poster`) d'une vidéo n'a pas de `srcset` (l'attribut HTML ne le permet pas), donc MediaFigure.astro y met toujours la plus grande variante disponible — et depuis la mosaïque de médias (DECISIONS.md 2026-08-12/13), une carte 16/9 peut afficher jusqu'à ~683px de large, ~1366px en 2x. 768 seul y était visiblement flou.",
+  "card": [384, 768, 1536],
+  "wide": [560, 1120]
+}

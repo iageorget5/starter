@@ -36,5 +36,28 @@ export default defineConfig(
   {
     files: ["eslint.config.js"],
     extends: [tseslint.configs.disableTypeChecked],
+  },
+  {
+    // Les outils de `scripts/` sont en JavaScript pur et importent des
+    // paquets sans déclarations de types (sharp, ffmpeg-static…). Les règles
+    // typées y voient `any` partout et produisent des dizaines d'erreurs dont
+    // aucune ne désigne un vrai défaut — sur agence-site, 37 d'entre elles
+    // ont masqué un `npm run check` rouge pendant plusieurs échanges. Le code
+    // livré, lui, garde l'analyse complète.
+    //
+    // `document` et `setTimeout` sont déclarés parce que le corps des
+    // `page.evaluate()` s'exécute dans la page, pas dans Node, et qu'ESLint
+    // n'a aucun moyen de le savoir.
+    files: ["scripts/**"],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: {
+      globals: {
+        Buffer: "readonly",
+        console: "readonly",
+        process: "readonly",
+        setTimeout: "readonly",
+        document: "readonly",
+      },
+    },
   }
 );
