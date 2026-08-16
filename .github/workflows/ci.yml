@@ -17,11 +17,27 @@ jobs:
       - run: npm run test           # Vitest
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e       # Playwright + axe-core
+      - run: npm run test:e2e       # Playwright + axe-core (Chromium)
+      # Seuils et URL dans lighthouserc.json, jamais en ligne de commande :
+      # une dérogation diluée dans un script shell devient invisible en revue,
+      # et `lhci` plafonne à 5 URL en découverte automatique — en tronquant
+      # SANS RIEN DIRE. Toute page ajoutée doit l'être aussi dans ce fichier.
       - name: Lighthouse CI
         run: |
           npm i -g @lhci/cli
-          lhci autorun --collect.staticDistDir=./dist \
-            --assert.assertions.categories:performance=0.95 \
-            --assert.assertions.categories:accessibility=0.95 \
-            --assert.assertions.categories:seo=0.95
+          lhci autorun
+
+  # Job séparé, et non une étape de plus dans `quality` : deux suites
+  # complètes contre la même instance de preview épuisent un runner partagé
+  # (constaté jusqu'au « Connection refused » en fin de run WebKit).
+  # Voir agence-context/DECISIONS.md (2026-08-15).
+  quality-webkit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps webkit
+      - run: npm run test:e2e:webkit

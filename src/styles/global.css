@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+/* L'attribut `hidden` normalisé une fois pour tout le site.
+ *
+ * La règle du navigateur (`[hidden] { display: none }`) perd contre
+ * n'importe quelle classe d'auteur qui pose un `display` — et Tailwind en
+ * pose partout. Pire : Tailwind émet ses utilitaires de `display` par ordre
+ * alphabétique, donc `.hidden` sort AVANT `.inline-flex` et, à spécificité
+ * égale, ne masque plus rien.
+ *
+ * Sans cette normalisation, tout échange progressif (un bouton rendu par le
+ * serveur que l'îlot remplace, un squelette de chargement) affiche les deux
+ * états à la fois. Corollaire : ne jamais passer `hidden` nu à un composant
+ * qui porte déjà une classe de `display`.
+ *
+ * Voir agence-context/DECISIONS.md (2026-08-15). */
+[hidden] {
+	display: none !important;
+}
